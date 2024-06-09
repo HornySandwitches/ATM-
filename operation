@@ -1,0 +1,56 @@
+/*
+Name: M.Yousuf
+Reg: Se231074
+Desc: ATM Screen
+ */
+import java.util.HashMap;
+import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+public class ATMOperation implements ATMInterface{
+    LocalDateTime myDateObj = LocalDateTime.now();
+    DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss");
+    String formattedDate = myDateObj.format(myFormatObj);
+    ATM atm=new ATM();
+        Map<Double,String> bill=new HashMap<>();//for ministatement
+        @Override
+        public void viewBalance() {
+            System.out.println("Available Balance is : "+atm.getBalance());
+        }
+        @Override
+        public void withdrawAmount(double withdrawAmount) {
+            if(withdrawAmount%500==0) {
+                if (withdrawAmount <= atm.getBalance()) {
+                    bill.put(withdrawAmount, "Amount Withdrawn");
+                    System.out.println("Collect Cash " + withdrawAmount);
+                    atm.setBalance(atm.getBalance() - withdrawAmount);
+                    viewBalance();
+                }
+                else {
+                    System.out.println("Insufficient Balance");
+                }
+            }
+                else {
+                System.out.println("Please enter the amount more than 500");
+                }
+        }
+
+        @Override
+        public void depositAmount(double depositAmount) {
+            bill.put(depositAmount,"Amount Deposited");
+            System.out.println(depositAmount+" Deposited Successfully");
+            atm.setBalance(atm.getBalance()+depositAmount);
+            viewBalance();
+
+        }
+
+        @Override
+        public void viewMiniStatement() {
+            for(Map.Entry<Double,String> m:bill.entrySet()){
+                System.out.println(m.getKey()+""+m.getValue());
+                System.out.println(formattedDate);
+            }
+
+        }
+    }
+
